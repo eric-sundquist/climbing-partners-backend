@@ -13,7 +13,7 @@ import { ImagesController } from '../controllers/api/images-controller.js'
 
 export const router = express.Router()
 
-const publicKey = Buffer.from(process.env.ACCESS_TOKEN_PUBLIC_KEY_64, 'base64')
+// const publicKey = Buffer.from(process.env.ACCESS_TOKEN_PUBLIC_KEY_64, 'base64')
 
 const controller = new ImagesController()
 

@@ -7,9 +7,6 @@
  */
 
 import mongoose from 'mongoose'
-import validator from 'validator'
-
-const { isURL } = validator
 
 // Create a schema.
 const schema = new mongoose.Schema({
@@ -20,8 +17,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    trim: true,
-    validate: [isURL, 'Please provide a valid URL.']
+    trim: true
   },
   description: {
     type: String,

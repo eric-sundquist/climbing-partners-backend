@@ -11,7 +11,7 @@ import { router as imagesRouter } from './images-router.js'
 
 export const router = express.Router()
 
-router.get('/', (req, res) => res.json({ message: 'Welcome to Picture it - Resource service API!' }))
+router.get('/', (req, res) => res.json({ message: 'Climbing partner API!' }))
 router.use('/images', imagesRouter)
 
 // Catch 404.
