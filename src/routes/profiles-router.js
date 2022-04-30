@@ -2,20 +2,17 @@
  * API version 1 routes.
  *
  * @author Eric Sundqvist
- * @author Mats Loock
  * @version 1.0.0
  */
 
 import express from 'express'
-import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
-import { ImagesController } from '../controllers/api/images-controller.js'
+import { ProfilesController } from '../controllers/api/profiles-controller.js'
+import { firebase } from '../config/firebase.js'
 
 export const router = express.Router()
 
-// const publicKey = Buffer.from(process.env.ACCESS_TOKEN_PUBLIC_KEY_64, 'base64')
-
-const controller = new ImagesController()
+const controller = new ProfilesController()
 
 // ------------------------------------------------------------------------------
 //  Helpers
@@ -40,22 +37,14 @@ const authenticateJWT = (req, res, next) => {
       throw new Error('Invalid authentication scheme.')
     }
 
-    const payload = jwt.verify(token, publicKey)
-    req.user = {
-      username: payload.preferred_username,
-      firstName: payload.given_name,
-      lastName: payload.family_name,
-      email: payload.email,
-      userId: payload.sub
-    }
+    firebase.auth().verifyIdToken(token).then((decodedToken) => {
+      req.user = {
+        uid: decodedToken.sub
+      }
+    })
     next()
   } catch (err) {
-    let error
-    if (err.name === 'TokenExpiredError') {
-      error = createError(401, 'Token expired.')
-    } else {
-      error = createError(401, 'Access token invalid or not provided.')
-    }
+    const error = createError(401, 'Access token invalid or not provided.')
     error.cause = err
     next(error)
   }
@@ -71,7 +60,7 @@ const authenticateJWT = (req, res, next) => {
  * @param {Function} next - Express next middleware function.
  */
 const authOwner = (req, res, next) => {
-  if (req.user.userId !== req.image.ownerUserId) {
+  if (req.user.uid !== req.image.ownerUserId) {
     const error = createError(403, 'The request contained valid data and was understood by the server, but the server is refusing action due to the authenticated user not having the necessary permissions for the resource.')
     next(error)
     return
@@ -84,7 +73,20 @@ const authOwner = (req, res, next) => {
 // ------------------------------------------------------------------------------
 
 // Provide req.image to the route if :id is present in the route path.
-router.param('id', (req, res, next, id) => controller.loadImageData(req, res, next, id))
+router.param('id', (req, res, next, id) => controller.loadProfileData(req, res, next, id))
+
+router.get('/test',
+  (req, res, next) => {
+    res.json('Beep boop. Testing testing.')
+  }
+)
+
+router.get('/test/protected',
+  authenticateJWT,
+  (req, res, next) => {
+    res.json('Oh wow! Much PROTECED. NEEDS AUTH! Beep boop. Testing testing.')
+  }
+)
 
 // GET images
 router.get('/',

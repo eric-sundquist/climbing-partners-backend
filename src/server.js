@@ -2,7 +2,6 @@
  * The starting point of the application.
  *
  * @author Eric Sundqvist
- * @author Mats Loock
  * @version 1.0.0
  */
 
@@ -11,6 +10,7 @@ import helmet from 'helmet'
 import logger from 'morgan'
 import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
+import cors from 'cors'
 
 try {
   await connectDB()
@@ -20,8 +20,12 @@ try {
   // Set various HTTP headers to make the application little more secure (https://www.npmjs.com/package/helmet).
   app.use(helmet())
 
+  app.use(cors({ origin: 'http://localhost:3000' }))
+
   // Set up a morgan logger using the dev format for log entries.
   app.use(logger('dev'))
+
+  app.use(express.json())
 
   // Register routes.
   app.use('/', router)

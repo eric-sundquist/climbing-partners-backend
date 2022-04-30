@@ -16,7 +16,9 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.2",
+    "firebase-admin": "^10.1.0",
     "helmet": "^5.0.1",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",

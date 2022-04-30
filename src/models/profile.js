@@ -1,8 +1,7 @@
 /**
- * Mongoose model Image.
+ * Mongoose model Profile.
  *
  * @author Eric Sundqvist
- * @author Mats Loock
  * @version 1.0.0
  */
 
@@ -10,13 +9,18 @@ import mongoose from 'mongoose'
 
 // Create a schema.
 const schema = new mongoose.Schema({
-  _id: {
-    type: String
-  },
-  imageUrl: {
+  firstName: {
     type: String,
     required: true,
-    unique: true,
+    minLength: [1, 'The description must be of minimum length 1 characters.'],
+    maxLength: [256, 'The description must be of maximum length 256 characters.'],
+    trim: true
+  },
+  lastName: {
+    type: String,
+    required: true,
+    minLength: [1, 'The description must be of minimum length 1 characters.'],
+    maxLength: [256, 'The description must be of maximum length 256 characters.'],
     trim: true
   },
   description: {
@@ -25,13 +29,7 @@ const schema = new mongoose.Schema({
     minLength: [1, 'The description must be of minimum length 1 characters.'],
     maxLength: [256, 'The description must be of maximum length 256 characters.']
   },
-  location: {
-    type: String,
-    trim: true,
-    minLength: [1, 'The location name must be of minimum length 1 characters.'],
-    maxLength: [256, 'The location name must be of maximum length 256 characters.']
-  },
-  ownerUserId: {
+  ownerUid: {
     type: String
   }
 }, {
@@ -47,10 +45,10 @@ const schema = new mongoose.Schema({
     transform: function (doc, ret) {
       delete ret.__v
       delete ret._id
-      delete ret.ownerUserId
+      delete ret.ownerUid
     }
   }
 })
 
 // Create a model using the schema.
-export const Image = mongoose.model('Image', schema)
+export const Profile = mongoose.model('Profile', schema)

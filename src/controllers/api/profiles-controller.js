@@ -4,36 +4,35 @@
  * @author Eric Sundqvist
  * @version 1.0.0
  */
-
 import createError from 'http-errors'
 import fetch from 'node-fetch'
-import { Image } from '../../models/image.js'
+import { Profile } from '../../models/profile.js'
 
 /**
  * Encapsulates a controller.
  */
-export class ImagesController {
+export class ProfilesController {
   /**
-   * Provide req.image to the route if :id is present.
+   * Provide req.profile to the route if :id is present.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
-   * @param {string} id - The value of the id for the image data to load.
+   * @param {string} id - The value of the id for the profile data to load.
    */
-  async loadImageData (req, res, next, id) {
+  async loadProfileData (req, res, next, id) {
     try {
       // Get the image.
-      const image = await Image.findById(id)
+      const profile = await Profile.findById(id)
 
       // If no image found send a 404 (Not Found).
-      if (!image) {
+      if (!profile) {
         next(createError(404, 'The requested resource was not found.'))
         return
       }
 
       // Provide the image to req.
-      req.image = image
+      req.profile = profile
 
       // Next middleware.
       next()
@@ -43,18 +42,18 @@ export class ImagesController {
   }
 
   /**
-   * Sends a JSON response containing a image.
+   * Sends a JSON response containing a profile.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
   async find (req, res, next) {
-    res.json(req.image)
+    res.json(req.profile)
   }
 
   /**
-   * Sends a JSON response containing all images created by the user.
+   * Sends a JSON response containing all profile created by the user.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.

@@ -7,12 +7,12 @@
 
 import express from 'express'
 import createError from 'http-errors'
-import { router as imagesRouter } from './images-router.js'
+import { router as profilesRouter } from './profiles-router.js'
 
 export const router = express.Router()
 
 router.get('/', (req, res) => res.json({ message: 'Climbing partner API!' }))
-router.use('/images', imagesRouter)
+router.use('/profiles', profilesRouter)
 
 // Catch 404.
 router.use('*', (req, res, next) => next(createError(404)))
