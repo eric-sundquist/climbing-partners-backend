@@ -14,10 +14,6 @@ export const router = express.Router()
 
 const controller = new ProfilesController()
 
-// ------------------------------------------------------------------------------
-//  Helpers
-// ------------------------------------------------------------------------------
-
 /**
  * Authenticates requests.
  *
@@ -60,7 +56,7 @@ const authenticateJWT = (req, res, next) => {
  * @param {Function} next - Express next middleware function.
  */
 const authOwner = (req, res, next) => {
-  if (req.user.uid !== req.image.ownerUserId) {
+  if (req.user.uid !== req.profile.ownerUid) {
     const error = createError(403, 'The request contained valid data and was understood by the server, but the server is refusing action due to the authenticated user not having the necessary permissions for the resource.')
     next(error)
     return
@@ -68,11 +64,10 @@ const authOwner = (req, res, next) => {
   next()
 }
 
-// ------------------------------------------------------------------------------
 //  Routes
-// ------------------------------------------------------------------------------
+// ---------------
 
-// Provide req.image to the route if :id is present in the route path.
+// Provide req.profile to the route if :id is present in the route path.
 router.param('id', (req, res, next, id) => controller.loadProfileData(req, res, next, id))
 
 router.get('/test',
@@ -88,13 +83,12 @@ router.get('/test/protected',
   }
 )
 
-// GET images
 router.get('/',
-  authenticateJWT,
+  // authenticateJWT,
   (req, res, next) => controller.findAll(req, res, next)
 )
 
-// GET images/:id
+// GET profile/:id
 router.get('/:id',
   authenticateJWT,
   authOwner,

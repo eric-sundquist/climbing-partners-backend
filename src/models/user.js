@@ -1,32 +1,25 @@
 /**
- * Mongoose model Profile.
+ * Mongoose model User.
  *
  * @author Eric Sundqvist
  * @version 1.0.0
  */
 
 import mongoose from 'mongoose'
+import { Profile } from './profile'
 
 // Create a schema.
 const schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: [3, 'The name must be of minimum length 1 characters.'],
-    maxLength: [256, 'The name must be of maximum length 256 characters.'],
-    trim: true
-  },
-  description: {
-    type: String,
-    trim: true,
-    minLength: [1, 'The description must be of minimum length 1 characters.'],
-    maxLength: [256, 'The description must be of maximum length 256 characters.']
-  },
-  disciplines: [{ disciple: String, grade: String }],
   uidOwner: {
     type: String,
     required: true
-  }
+  },
+  profile: {
+    type: Profile,
+    default: {}
+  },
+  partners: [{ partner: mongoose.ObjectId }],
+  searches: [{ search: mongoose.ObjectId }]
 }, {
   timestamps: true,
   toJSON: {
@@ -46,4 +39,4 @@ const schema = new mongoose.Schema({
 })
 
 // Create a model using the schema.
-export const Profile = mongoose.model('Profile', schema)
+export const User = mongoose.model('User', schema)

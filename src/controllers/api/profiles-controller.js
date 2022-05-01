@@ -69,7 +69,7 @@ export class ProfilesController {
   }
 
   /**
-   * Creates a new image.
+   * Creates a new profile.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -77,7 +77,6 @@ export class ProfilesController {
    */
   async create (req, res, next) {
     try {
-      if (!this.isAllowedContentType(req, res, next)) return
       if (!req.body.data) {
         next(createError(400, 'The request cannot or will not be processed due to something that is perceived to be a client error (for example, validation error).'))
         return
@@ -87,9 +86,6 @@ export class ProfilesController {
         data: req.body.data,
         contentType: req.body.contentType
       }
-
-      const response = await this.fetchPictureApi('POST', 'images', body)
-      const data = await response.json()
 
       // Save URL and image data in database
       const image = new Image({
