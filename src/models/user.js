@@ -6,20 +6,19 @@
  */
 
 import mongoose from 'mongoose'
-import { Profile } from './profile'
+import { profile } from './profile.js'
 
 // Create a schema.
 const schema = new mongoose.Schema({
-  uidOwner: {
-    type: String,
-    required: true
+  _id: {
+    type: String
   },
   profile: {
-    type: Profile,
+    type: profile,
     default: {}
   },
-  partners: [{ partner: mongoose.ObjectId }],
-  searches: [{ search: mongoose.ObjectId }]
+  partners: [{ partner: { type: mongoose.ObjectId, unique: true } }],
+  searches: [{ search: { type: mongoose.ObjectId, unique: true } }]
 }, {
   timestamps: true,
   toJSON: {
@@ -33,7 +32,6 @@ const schema = new mongoose.Schema({
     transform: function (doc, ret) {
       delete ret.__v
       delete ret._id
-      delete ret.uidOwner
     }
   }
 })

@@ -8,25 +8,20 @@
 import mongoose from 'mongoose'
 
 // Create a schema.
-const schema = new mongoose.Schema({
+export const profile = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    minLength: [3, 'The name must be of minimum length 1 characters.'],
     maxLength: [256, 'The name must be of maximum length 256 characters.'],
-    trim: true
+    trim: true,
+    default: ''
   },
   description: {
     type: String,
     trim: true,
-    minLength: [1, 'The description must be of minimum length 1 characters.'],
-    maxLength: [256, 'The description must be of maximum length 256 characters.']
+    maxLength: [2048, 'The description must be of maximum length 2048 characters.'],
+    default: ''
   },
-  disciplines: [{ disciple: String, grade: String }],
-  uidOwner: {
-    type: String,
-    required: true
-  }
+  disciplines: [{ discipline: String, grade: String }]
 }, {
   timestamps: true,
   toJSON: {
@@ -40,10 +35,6 @@ const schema = new mongoose.Schema({
     transform: function (doc, ret) {
       delete ret.__v
       delete ret._id
-      delete ret.uidOwner
     }
   }
 })
-
-// Create a model using the schema.
-export const Profile = mongoose.model('Profile', schema)
