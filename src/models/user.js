@@ -17,8 +17,8 @@ const schema = new mongoose.Schema({
     type: profile,
     default: {}
   },
-  partners: [{ partner: { type: mongoose.ObjectId, unique: true } }],
-  searches: [{ search: { type: mongoose.ObjectId, unique: true } }]
+  partners: [{ partner: mongoose.ObjectId }],
+  searches: [{ search: mongoose.ObjectId }]
 }, {
   timestamps: true,
   toJSON: {

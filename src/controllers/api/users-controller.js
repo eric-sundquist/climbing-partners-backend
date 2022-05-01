@@ -82,7 +82,7 @@ export class UsersController {
   }
 
   /**
-   * Updates some of a specific user resource called with PUT http method.
+   * Updates some of a specific user resource. Overwrites old data.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -90,12 +90,9 @@ export class UsersController {
    */
   async updateProfile (req, res, next) {
     try {
-      console.log(req.user.profile)
       req.user.profile.name = req.body.name
       req.user.profile.description = req.body.description
       req.user.profile.disciplines = req.body.disciplines
-
-      console.log(req.user)
 
       await req.user.save()
 
