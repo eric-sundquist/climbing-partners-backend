@@ -59,7 +59,9 @@ export class UsersController {
    * @param {Function} next - Express next middleware function.
    */
   async getProfile (req, res, next) {
-    res.json(req.user.profile)
+    res
+      .status(200)
+      .json(req.user.profile)
   }
 
   /**
@@ -75,7 +77,7 @@ export class UsersController {
       await user.save()
       res
         .status(201)
-        .json(user)
+        .json()
     } catch (error) {
       next(error)
     }
@@ -95,10 +97,10 @@ export class UsersController {
       req.user.profile.disciplines = req.body.disciplines
 
       await req.user.save()
-
+      console.log('körs')
       res
-        .status(204)
-        .end()
+        .status(200)
+        .json(req.user)
     } catch (error) {
       next(error)
     }
