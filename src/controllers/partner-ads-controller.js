@@ -1,16 +1,16 @@
 /**
- * Module for the User Controller.
+ * Module for the PartnerAdsController Controller.
  *
  * @author Eric Sundqvist
  * @version 1.0.0
  */
 import createError from 'http-errors'
-import { User } from '../../models/user.js'
+import { PartnerAd } from '../models/partner-ad.js'
 
 /**
  * Encapsulates a controller.
  */
-export class UsersController {
+export class PartnerAdsController {
   /**
    * Provide req.user to the route if :id is present.
    *
@@ -19,19 +19,19 @@ export class UsersController {
    * @param {Function} next - Express next middleware function.
    * @param {string} id - The value of the id for the User data to load.
    */
-  async loadUserData (req, res, next, id) {
+  async loadPartnerAdData (req, res, next, id) {
     try {
-      // Get the user.
-      const user = await User.findById(id)
+      // Get the ad.
+      const partnerAd = await PartnerAd.findById(id)
 
-      // If no image found send a 404 (Not Found).
-      if (!user) {
+      // If no search found send a 404 (Not Found).
+      if (!partnerAd) {
         next(createError(404, 'The requested resource was not found.'))
         return
       }
 
       // Provide the image to req.
-      req.user = user
+      req.partnerAd = partnerAd
 
       // Next middleware.
       next()
@@ -65,7 +65,7 @@ export class UsersController {
   }
 
   /**
-   * Creates a new profile.
+   * Creates a new ad.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -73,11 +73,16 @@ export class UsersController {
    */
   async create (req, res, next) {
     try {
-      const user = new User({ _id: req.uid })
-      await user.save()
+      const ad = new PartnerAd({
+        uid: req.body.uid,
+        date: req.body.date,
+        location: req.body.location,
+        disciplines: req.body.disciplines
+      })
+      await ad.save()
       res
         .status(201)
-        .json()
+        .json(ad)
     } catch (error) {
       next(error)
     }

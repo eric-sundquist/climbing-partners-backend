@@ -1,5 +1,5 @@
 /**
- * API version 1 routes.
+ * Module for partner ads routing.
  *
  * @author Eric Sundqvist
  * @version 1.0.0
@@ -7,21 +7,21 @@
 
 import express from 'express'
 import { authOwner } from './auth-owner.js'
-import { UsersController } from '../controllers/users-controller.js'
+import { PartnerAdsController } from '../controllers/partner-ads-controller.js'
 
 export const router = express.Router()
 
-const controller = new UsersController()
+const controller = new PartnerAdsController()
 
-// Provide req.user to the route if :id is present in the route path.
-router.param('id', (req, res, next, id) => controller.loadUserData(req, res, next, id))
+// Provide req.partnerAd to the route if :id is present in the route path.
+router.param('id', (req, res, next, id) => controller.loadPartnerAdData(req, res, next, id))
 
-// Create user
+// Create a search
 router.post('/',
   (req, res, next) => controller.create(req, res, next)
 )
 
-// GET user profile (Public for auth users)
+// GET user profile (Public)
 router.get('/:id/profile',
   (req, res, next) => controller.getProfile(req, res, next)
 )

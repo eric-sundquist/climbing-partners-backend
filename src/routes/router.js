@@ -8,17 +8,11 @@
 import express from 'express'
 import createError from 'http-errors'
 import { router as usersRouter } from './users-router.js'
+import { router as partnerAdsRouter } from './partner-ads-router.js'
+
 import { firebase } from '../config/firebase.js'
 
 export const router = express.Router()
-
-router.get('/', (req, res) => res.json({ message: 'Welcome Climbing partner API! All other routes requires authentication.' }))
-router.use('/users',
-  authenticateJWT,
-  usersRouter)
-
-// Catch 404.
-router.use('*', (req, res, next) => next(createError(404)))
 
 /**
  * Authenticates requests.
@@ -49,3 +43,15 @@ async function authenticateJWT (req, res, next) {
     next(error)
   }
 }
+
+router.get('/', (req, res) => res.json({ message: 'Welcome Climbing partner API! All other routes requires authentication.' }))
+
+router.use('/users',
+  authenticateJWT,
+  usersRouter)
+
+router.use('/partner-search',
+  authenticateJWT,
+  partnerAdsRouter)
+// Catch 404.
+router.use('*', (req, res, next) => next(createError(404)))
