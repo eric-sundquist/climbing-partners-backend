@@ -16,24 +16,29 @@ const controller = new PartnerAdsController()
 // Provide req.partnerAd to the route if :id is present in the route path.
 router.param('id', (req, res, next, id) => controller.loadPartnerAdData(req, res, next, id))
 
-// Create a search
+// GET all partner ads
+router.get('/',
+  (req, res, next) => controller.findAll(req, res, next)
+)
+
+// Create a ad
 router.post('/',
   (req, res, next) => controller.create(req, res, next)
 )
 
-// GET user profile (Public)
-router.get('/:id/profile',
-  (req, res, next) => controller.getProfile(req, res, next)
-)
-
-// update user profile
-router.put('/:id/profile',
-  authOwner,
-  (req, res, next) => controller.updateProfile(req, res, next)
-)
-
-// GET user
+// Get a partner ad
 router.get('/:id',
-  authOwner,
   (req, res, next) => controller.find(req, res, next)
+)
+
+// update a partner ad
+router.put('/:id',
+  authOwner,
+  (req, res, next) => controller.update(req, res, next)
+)
+
+// delete a partner ad
+router.delete('/:id',
+  authOwner,
+  (req, res, next) => controller.delete(req, res, next)
 )

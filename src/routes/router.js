@@ -9,7 +9,6 @@ import express from 'express'
 import createError from 'http-errors'
 import { router as usersRouter } from './users-router.js'
 import { router as partnerAdsRouter } from './partner-ads-router.js'
-
 import { firebase } from '../config/firebase.js'
 
 export const router = express.Router()
@@ -53,5 +52,6 @@ router.use('/users',
 router.use('/partner-search',
   authenticateJWT,
   partnerAdsRouter)
+
 // Catch 404.
 router.use('*', (req, res, next) => next(createError(404)))

@@ -41,27 +41,16 @@ export class PartnerAdsController {
   }
 
   /**
-   * Sends a JSON response requested user.
+   * Sends a JSON response with requested partner ad.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
   async find (req, res, next) {
-    res.json(req.user)
-  }
-
-  /**
-   * Send JSON response, requested user profile.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  async getProfile (req, res, next) {
     res
       .status(200)
-      .json(req.user.profile)
+      .json(req.partnerAd)
   }
 
   /**
@@ -74,10 +63,13 @@ export class PartnerAdsController {
   async create (req, res, next) {
     try {
       const ad = new PartnerAd({
-        uid: req.body.uid,
+        uidOwner: req.body.uid,
         date: req.body.date,
         location: req.body.location,
-        disciplines: req.body.disciplines
+        description: req.body.description,
+        disciplines: req.body.disciplines,
+        transport: req.body.transport,
+        equipment: req.body.equipment
       })
       await ad.save()
       res
@@ -89,23 +81,45 @@ export class PartnerAdsController {
   }
 
   /**
-   * Updates some of a specific user resource. Overwrites old data.
+   * Updates a partner ad.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async updateProfile (req, res, next) {
+  async update (req, res, next) {
     try {
-      req.user.profile.name = req.body.name
-      req.user.profile.description = req.body.description
-      req.user.profile.disciplines = req.body.disciplines
+      req.partnerAd.date = req.body.date
+      req.partnerAd.location = req.body.location
+      req.partnerAd.description = req.body.description
+      req.partnerAd.disciplines = req.body.disciplines
+      req.partnerAd.transport = req.body.transport
+      req.partnerAd.equipment = req.body.equipment
 
-      await req.user.save()
-      console.log('körs')
+      await req.partnerAd.save()
+
       res
         .status(200)
         .json(req.user)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Deletes the specified partner Ad.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async delete (req, res, next) {
+    try {
+      await req.partnerAd.deleteOne()
+
+      res
+        .status(204)
+        .end()
     } catch (error) {
       next(error)
     }

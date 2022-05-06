@@ -9,12 +9,21 @@ import express from 'express'
 import { authOwner } from './auth-owner.js'
 import { UsersController } from '../controllers/users-controller.js'
 
+/*
+  Lägg till nya partner ad funktioner i controllern. Skapa partner ad med population.
+  https://mongoosejs.com/docs/populate.html
+  https://www.youtube.com/watch?v=kjKR0q8EBKE
+*/
+
 export const router = express.Router()
 
 const controller = new UsersController()
 
-// Provide req.user to the route if :id is present in the route path.
-router.param('id', (req, res, next, id) => controller.loadUserData(req, res, next, id))
+// Provide req.user to the route if :userId is present in the route path.
+router.param('userId', (req, res, next, id) => controller.loadUserData(req, res, next, id))
+
+// Provide req.partnerAd to the route if :adId is present in the route path.
+router.param('adId', (req, res, next, id) => controller.loadAdData(req, res, next, id))
 
 // Create user
 router.post('/',
@@ -22,18 +31,42 @@ router.post('/',
 )
 
 // GET user profile (Public for auth users)
-router.get('/:id/profile',
+router.get('/:userId/profile',
   (req, res, next) => controller.getProfile(req, res, next)
 )
 
 // update user profile
-router.put('/:id/profile',
+router.put('/:userId/profile',
   authOwner,
   (req, res, next) => controller.updateProfile(req, res, next)
 )
 
 // GET user
-router.get('/:id',
+router.get('/:userId',
   authOwner,
   (req, res, next) => controller.find(req, res, next)
+)
+
+// Create partner AD
+router.post('/:userId/partner-ad',
+  authOwner,
+  (req, res, next) => controller.createPartnerAd(req, res, next)
+)
+
+// Get All partner ads
+router.get('/:userId/partner-ad',
+  authOwner,
+  (req, res, next) => controller.getAllPartnerAds(req, res, next)
+)
+
+// Update a partner ad
+router.put('/:userId/partner-ad/:adId',
+  authOwner,
+  (req, res, next) => controller.updatePartnerAd(req, res, next)
+)
+
+// Delete a partner ad
+router.put('/:userId/partner-ad/:adId',
+  authOwner,
+  (req, res, next) => controller.deletePartnerAd(req, res, next)
 )

@@ -5,7 +5,7 @@
  * @version 1.0.0
  */
 
-import mongoose from 'mongoose'
+import { mongoose } from 'mongoose'
 import { profile } from './profile.js'
 
 const schema = new mongoose.Schema({
@@ -16,8 +16,8 @@ const schema = new mongoose.Schema({
     type: profile,
     default: {}
   },
-  partners: [{ partner: mongoose.ObjectId }],
-  searches: [{ search: mongoose.ObjectId }]
+  partners: [mongoose.ObjectId],
+  ads: [{ type: mongoose.Schema.Types.ObjectId }]
 }, {
   timestamps: true
 })

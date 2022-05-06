@@ -8,7 +8,7 @@
 import mongoose from 'mongoose'
 
 export const partnerAd = new mongoose.Schema({
-  uid: {
+  uidOwner: {
     type: String,
     required: [true, 'Assingning a user id is required']
   },
@@ -18,7 +18,13 @@ export const partnerAd = new mongoose.Schema({
   },
   location: {
     type: String,
-    required: [true, 'Assigning a location is required']
+    required: [true, 'Assigning a location is required'],
+    maxLength: [512, 'The location must be of maximum length 512 characters.']
+
+  },
+  description: {
+    type: String,
+    maxLength: [2048, 'The description must be of maximum length 2048 characters.']
   },
   disciplines: [{ discipline: String, grade: String }],
   equipment: Boolean,
@@ -27,4 +33,4 @@ export const partnerAd = new mongoose.Schema({
   timestamps: true
 })
 
-export const PartnerAd = mongoose.model('partnerAd', partnerAd)
+export const PartnerAd = mongoose.model('PartnerAd', partnerAd)

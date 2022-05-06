@@ -97,7 +97,6 @@ export class UsersController {
       req.user.profile.disciplines = req.body.disciplines
 
       await req.user.save()
-      console.log('körs')
       res
         .status(200)
         .json(req.user)
@@ -105,4 +104,32 @@ export class UsersController {
       next(error)
     }
   }
+
+  // /**
+  //  * Adds partner ad id to owner.
+  //  *
+  //  * @param {string} uid - uid of the owner.
+  //  * @param {string} newAdId - id of the new partner ad.
+  //  * @returns {Array} ids of ads connected to user.
+  //  */
+  // async addPartnerAd (uid, newAdId) {
+  //   const user = await User.findById(uid)
+  //   user.ads = [...user.ads, newAdId]
+  //   user.ads.save()
+
+  //   return user.ads
+  // }
+
+  // /**
+  //  * Adds partner ad id to owner.
+  //  *
+  //  * @param {string} uid - uid of the owner.
+  //  * @param {string} deleteAdId - id of the new partner ad.
+  //  * @returns {Array} ids of ads connected to user.
+  //  */
+  // async deletePartnerAd (uid, deleteAdId) {
+  //   const user = await User.findById(uid)
+  //   user.ads = [...user.ads, newAdId]
+  //   return user.ads
+  // }
 }
