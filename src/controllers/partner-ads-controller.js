@@ -54,72 +54,19 @@ export class PartnerAdsController {
   }
 
   /**
-   * Creates a new ad.
+   * Sends a JSON response with requested partner ad.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async create (req, res, next) {
+  async findAll (req, res, next) {
     try {
-      const ad = new PartnerAd({
-        uidOwner: req.body.uid,
-        date: req.body.date,
-        location: req.body.location,
-        description: req.body.description,
-        disciplines: req.body.disciplines,
-        transport: req.body.transport,
-        equipment: req.body.equipment
-      })
-      await ad.save()
-      res
-        .status(201)
-        .json(ad)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  /**
-   * Updates a partner ad.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  async update (req, res, next) {
-    try {
-      req.partnerAd.date = req.body.date
-      req.partnerAd.location = req.body.location
-      req.partnerAd.description = req.body.description
-      req.partnerAd.disciplines = req.body.disciplines
-      req.partnerAd.transport = req.body.transport
-      req.partnerAd.equipment = req.body.equipment
-
-      await req.partnerAd.save()
+      const ads = await PartnerAd.find()
 
       res
         .status(200)
-        .json(req.user)
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  /**
-   * Deletes the specified partner Ad.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  async delete (req, res, next) {
-    try {
-      await req.partnerAd.deleteOne()
-
-      res
-        .status(204)
-        .end()
+        .json(ads)
     } catch (error) {
       next(error)
     }

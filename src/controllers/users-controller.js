@@ -212,6 +212,12 @@ export class UsersController {
   async updatePartnerAd (req, res, next) {
     try {
       // Tänk efter om jag vill implementera detta....
+      // req.partnerAd.date = req.body.date
+      // req.partnerAd.location = req.body.location
+      // req.partnerAd.description = req.body.description
+      // req.partnerAd.disciplines = req.body.disciplines
+      // req.partnerAd.transport = req.body.transport
+      // req.partnerAd.equipment = req.body.equipment
       console.log('Tänk efter om jag vill implementera detta....')
       res.status(418)
     } catch (error) {
