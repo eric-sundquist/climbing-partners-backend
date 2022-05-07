@@ -17,7 +17,7 @@ const schema = new mongoose.Schema({
     default: {}
   },
   partners: [mongoose.ObjectId],
-  ads: [{ type: mongoose.Schema.Types.ObjectId }]
+  ads: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PartnerAd' }]
 }, {
   timestamps: true
 })

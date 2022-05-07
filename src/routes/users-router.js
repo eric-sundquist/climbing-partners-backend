@@ -47,16 +47,22 @@ router.get('/:userId',
   (req, res, next) => controller.find(req, res, next)
 )
 
-// Create partner AD
+// Create partner ad
 router.post('/:userId/partner-ad',
   authOwner,
   (req, res, next) => controller.createPartnerAd(req, res, next)
 )
 
-// Get All partner ads
+// Get all of the users partnerAds
 router.get('/:userId/partner-ad',
   authOwner,
   (req, res, next) => controller.getAllPartnerAds(req, res, next)
+)
+
+// Get partner ad
+router.get('/:userId/partner-ad/:adId',
+  authOwner,
+  (req, res, next) => controller.getPartnerAd(req, res, next)
 )
 
 // Update a partner ad
@@ -66,7 +72,7 @@ router.put('/:userId/partner-ad/:adId',
 )
 
 // Delete a partner ad
-router.put('/:userId/partner-ad/:adId',
+router.delete('/:userId/partner-ad/:adId',
   authOwner,
   (req, res, next) => controller.deletePartnerAd(req, res, next)
 )

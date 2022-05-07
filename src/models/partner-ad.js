@@ -8,7 +8,7 @@
 import mongoose from 'mongoose'
 
 export const partnerAd = new mongoose.Schema({
-  uidOwner: {
+  owner: {
     type: String,
     required: [true, 'Assingning a user id is required']
   },
