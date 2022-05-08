@@ -153,16 +153,14 @@ export class UsersController {
         equipment: req.body.equipment,
         transport: req.body.transport
       })
-
       await ad.save()
 
       req.user.ads.push(ad)
-
       await req.user.save()
 
       res
         .status(201)
-        .json(req.user)
+        .json(ad)
     } catch (error) {
       next(error)
     }
@@ -177,15 +175,11 @@ export class UsersController {
    */
   async getAllPartnerAds (req, res, next) {
     try {
-      User.findById(req.params.userId)
-        .populate('ads')
-        .exec((err, user) => {
-          if (err) next(err)
+      const ads = await req.user.populate('ads')
 
-          res
-            .status(200)
-            .json(user.ads)
-        })
+      res
+        .status(200)
+        .json(ads)
     } catch (error) {
       next(error)
     }
@@ -212,6 +206,7 @@ export class UsersController {
   async updatePartnerAd (req, res, next) {
     try {
       // Tänk efter om jag vill implementera detta....
+
       // req.partnerAd.date = req.body.date
       // req.partnerAd.location = req.body.location
       // req.partnerAd.description = req.body.description
