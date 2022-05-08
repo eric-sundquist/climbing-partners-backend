@@ -44,7 +44,7 @@ router.put('/:userId/profile',
 // GET user
 router.get('/:userId',
   authOwner,
-  (req, res, next) => controller.find(req, res, next)
+  (req, res, next) => controller.getUser(req, res, next)
 )
 
 // Create partner ad

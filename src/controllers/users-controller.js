@@ -77,8 +77,9 @@ export class UsersController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async find (req, res, next) {
-    res.json(req.user)
+  async getUser (req, res, next) {
+    const user = await req.user.populate('ads')
+    res.json(user)
   }
 
   /**
@@ -107,7 +108,7 @@ export class UsersController {
       await user.save()
       res
         .status(201)
-        .json()
+        .json(user)
     } catch (error) {
       next(error)
     }
@@ -175,11 +176,11 @@ export class UsersController {
    */
   async getAllPartnerAds (req, res, next) {
     try {
-      const ads = await req.user.populate('ads')
+      const user = await req.user.populate('ads')
 
       res
         .status(200)
-        .json(ads)
+        .json(user.ads)
     } catch (error) {
       next(error)
     }
@@ -234,7 +235,7 @@ export class UsersController {
 
       await req.user.save()
 
-      res.status(200).json(req.user)
+      res.status(204).end()
     } catch (error) {
       next(error)
     }
