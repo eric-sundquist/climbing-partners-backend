@@ -49,7 +49,7 @@ router.use('/users',
   authenticateJWT,
   usersRouter)
 
-router.use('/partner-search',
+router.use('/partner-ads',
   authenticateJWT,
   partnerAdsRouter)
 

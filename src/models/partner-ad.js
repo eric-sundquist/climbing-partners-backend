@@ -8,10 +8,7 @@
 import mongoose from 'mongoose'
 
 export const partnerAd = new mongoose.Schema({
-  owner: {
-    type: String,
-    required: [true, 'Assingning a user id is required']
-  },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   date: {
     type: Date,
     required: [true, 'Assigning a date is required']

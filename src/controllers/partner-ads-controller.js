@@ -71,4 +71,27 @@ export class PartnerAdsController {
       next(error)
     }
   }
+
+  /**
+   * Filters partner ads by query supplied query string. Sends found ads in response.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async filter (req, res, next) {
+    try {
+      const date = new Date(req.query.date)
+      const ads = await PartnerAd.find({ location: req.query.location, date: date })
+
+      console.log(ads)
+
+      res
+        .status(200)
+        .json(ads)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
 }

@@ -130,7 +130,7 @@ export class UsersController {
       await req.user.save()
       res
         .status(200)
-        .json(req.user)
+        .json(req.user.profile)
     } catch (error) {
       next(error)
     }
@@ -163,6 +163,7 @@ export class UsersController {
         .status(201)
         .json(ad)
     } catch (error) {
+      console.log(error)
       next(error)
     }
   }

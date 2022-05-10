@@ -19,6 +19,12 @@ router.param('id', (req, res, next, id) => controller.loadPartnerAdData(req, res
 router.get('/',
   (req, res, next) => controller.findAll(req, res, next)
 )
+
+// GET all partner ads
+router.get('/filter',
+  (req, res, next) => controller.filter(req, res, next)
+)
+
 // Get a partner ad
 router.get('/:id',
   (req, res, next) => controller.find(req, res, next)
