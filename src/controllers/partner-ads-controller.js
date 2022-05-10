@@ -82,7 +82,7 @@ export class PartnerAdsController {
   async filter (req, res, next) {
     try {
       const date = new Date(req.query.date)
-      const ads = await PartnerAd.find({ location: req.query.location, date: date })
+      const ads = await PartnerAd.find({ location: req.query.location, date: date }).populate('owner')
 
       console.log(ads)
 
