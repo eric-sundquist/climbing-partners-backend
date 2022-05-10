@@ -18,12 +18,12 @@ export class UsersController {
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
-   * @param {string} id - The value of the id for the User data to load.
+   * @param {string} userId - The value of the id for the User data to load.
    */
-  async loadUserData (req, res, next, id) {
+  async loadUserData (req, res, next, userId) {
     try {
       // Get the user.
-      const user = await User.findById(id)
+      const user = await User.findOne({ uid: userId })
 
       // If no image found send a 404 (Not Found).
       if (!user) {
@@ -47,12 +47,12 @@ export class UsersController {
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
-   * @param {string} id - The value of the id for the User data to load.
+   * @param {string} adId - The value of the id for the User data to load.
    */
-  async loadAdData (req, res, next, id) {
+  async loadAdData (req, res, next, adId) {
     try {
       // Get the user.
-      const ad = await PartnerAd.findById(id)
+      const ad = await PartnerAd.findById(adId)
 
       // If no image found send a 404 (Not Found).
       if (!ad) {
@@ -104,7 +104,7 @@ export class UsersController {
    */
   async create (req, res, next) {
     try {
-      const user = new User({ _id: req.uid })
+      const user = new User({ uid: req.uid })
       await user.save()
       res
         .status(201)
@@ -196,30 +196,6 @@ export class UsersController {
    */
   async getPartnerAd (req, res, next) {
     res.status(200).json(req.partnerAd)
-  }
-
-  /**
-   * Update partner ad.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  async updatePartnerAd (req, res, next) {
-    try {
-      // Tänk efter om jag vill implementera detta....
-
-      // req.partnerAd.date = req.body.date
-      // req.partnerAd.location = req.body.location
-      // req.partnerAd.description = req.body.description
-      // req.partnerAd.disciplines = req.body.disciplines
-      // req.partnerAd.transport = req.body.transport
-      // req.partnerAd.equipment = req.body.equipment
-      console.log('Tänk efter om jag vill implementera detta....')
-      res.status(418)
-    } catch (error) {
-      next(error)
-    }
   }
 
   /**

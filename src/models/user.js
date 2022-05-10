@@ -9,7 +9,7 @@ import { mongoose } from 'mongoose'
 import { profile } from './profile.js'
 
 const schema = new mongoose.Schema({
-  _id: {
+  uid: {
     type: String
   },
   profile: {

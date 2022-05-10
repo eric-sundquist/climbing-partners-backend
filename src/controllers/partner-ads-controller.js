@@ -90,7 +90,6 @@ export class PartnerAdsController {
         .status(200)
         .json(ads)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }

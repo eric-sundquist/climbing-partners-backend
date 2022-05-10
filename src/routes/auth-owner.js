@@ -17,7 +17,7 @@ import createError from 'http-errors'
  * @param {Function} next - Express next middleware function.
  */
 export const authOwner = (req, res, next) => {
-  if (req.uid !== req.user._id) {
+  if (req.uid !== req.user.uid) {
     const error = createError(403, 'The request contained valid data and was understood by the server, but the server is refusing action due to the authenticated user not having the necessary permissions for the resource.')
     next(error)
     return

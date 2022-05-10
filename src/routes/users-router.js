@@ -20,10 +20,10 @@ export const router = express.Router()
 const controller = new UsersController()
 
 // Provide req.user to the route if :userId is present in the route path.
-router.param('userId', (req, res, next, id) => controller.loadUserData(req, res, next, id))
+router.param('userId', (req, res, next, userId) => controller.loadUserData(req, res, next, userId))
 
 // Provide req.partnerAd to the route if :adId is present in the route path.
-router.param('adId', (req, res, next, id) => controller.loadAdData(req, res, next, id))
+router.param('adId', (req, res, next, adId) => controller.loadAdData(req, res, next, adId))
 
 // Create user
 router.post('/',
@@ -64,13 +64,6 @@ router.get('/:userId/partner-ad/:adId',
   authOwner,
   (req, res, next) => controller.getPartnerAd(req, res, next)
 )
-
-// Update a partner ad
-router.put('/:userId/partner-ad/:adId',
-  authOwner,
-  (req, res, next) => controller.updatePartnerAd(req, res, next)
-)
-
 // Delete a partner ad
 router.delete('/:userId/partner-ad/:adId',
   authOwner,
