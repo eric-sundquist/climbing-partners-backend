@@ -5,6 +5,7 @@
  * @version 1.0.0
  */
 import createError from 'http-errors'
+import { endOfDay, startOfDay } from 'date-fns'
 import { PartnerAd } from '../models/partner-ad.js'
 
 /**
@@ -82,7 +83,13 @@ export class PartnerAdsController {
   async filter (req, res, next) {
     try {
       const date = new Date(req.query.date)
-      const ads = await PartnerAd.find({ location: req.query.location, date: date }).populate('owner')
+      const ads = await PartnerAd.find({
+        location: req.query.location,
+        date: {
+          $gte: startOfDay(date),
+          $lte: endOfDay(date)
+        }
+      }).populate('owner')
 
       console.log(ads)
 
