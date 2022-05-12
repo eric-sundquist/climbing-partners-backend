@@ -8,7 +8,7 @@
 import { mongoose } from 'mongoose'
 import { profile } from './profile.js'
 
-const schema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   uid: {
     type: String
   },
@@ -17,9 +17,29 @@ const schema = new mongoose.Schema({
     default: {}
   },
   partners: [mongoose.ObjectId],
+  invites: [{
+    fromUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    ad: { type: mongoose.Schema.Types.ObjectId, ref: 'PartnerAd' }
+  }],
   ads: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PartnerAd' }]
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: {
+    virtuals: true, // ensure virtual fields are serialized
+    /**
+     * Performs a transformation of the resulting object to remove sensitive information.
+     *
+     * @param {object} doc - The mongoose document which is being converted.
+     * @param {object} ret - The plain object representation which has been converted.
+     */
+    transform: function (doc, ret) {
+      delete ret.__v
+      delete ret._id
+    }
+  }
 })
 
-export const User = mongoose.model('User', schema)
+userSchema.virtual('id').get(function () {
+  return this._id.toHexString()
+})
+export const User = mongoose.model('User', userSchema)

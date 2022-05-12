@@ -78,8 +78,11 @@ export class UsersController {
    * @param {Function} next - Express next middleware function.
    */
   async getUser (req, res, next) {
-    const user = await req.user.populate('ads')
-    res.json(user)
+    const p1 = req.user.populate('ads')
+    const p2 = req.user.populate({ path: 'invites.ad' })
+    const p3 = req.user.populate({ path: 'invites.fromUser' })
+    await Promise.all([p1, p2, p3])
+    res.json(req.user)
   }
 
   /**
@@ -209,6 +212,62 @@ export class UsersController {
     try {
       await PartnerAd.findByIdAndDelete(req.params.adId)
       req.user.ads = req.user.ads.filter(adObjectId => adObjectId.valueOf() !== req.params.adId)
+
+      await req.user.save()
+
+      res.status(204).end()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Creates an invite.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async createInvite (req, res, next) {
+    try {
+      const { fromUserId, adId } = req.body
+      req.user.invites.push({
+        fromUser: fromUserId,
+        ad: adId
+      })
+      await req.user.save()
+
+      res.status(204).end()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Get user invites.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async getInvites (req, res, next) {
+    try {
+      res.status(204).end()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Delete partner ad.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async deleteInvite (req, res, next) {
+    try {
+      await req.user.invites.id(req.params.inviteId).remove()
 
       await req.user.save()
 

@@ -22,9 +22,6 @@ const controller = new UsersController()
 // Provide req.user to the route if :userId is present in the route path.
 router.param('userId', (req, res, next, userId) => controller.loadUserData(req, res, next, userId))
 
-// Provide req.partnerAd to the route if :adId is present in the route path.
-router.param('adId', (req, res, next, adId) => controller.loadAdData(req, res, next, adId))
-
 // Create user
 router.post('/',
   (req, res, next) => controller.create(req, res, next)
@@ -47,6 +44,11 @@ router.get('/:userId',
   (req, res, next) => controller.getUser(req, res, next)
 )
 
+// ----- user -> partner ad ------
+
+// Provide req.partnerAd to the route if :adId is present in the route path.
+router.param('adId', (req, res, next, adId) => controller.loadAdData(req, res, next, adId))
+
 // Create partner ad
 router.post('/:userId/partner-ad',
   authOwner,
@@ -68,4 +70,21 @@ router.get('/:userId/partner-ad/:adId',
 router.delete('/:userId/partner-ad/:adId',
   authOwner,
   (req, res, next) => controller.deletePartnerAd(req, res, next)
+)
+
+// ----- user -> invites ------
+
+// Get invites
+router.get('/:userId/invites',
+  (req, res, next) => controller.getInvites(req, res, next)
+)
+
+// Create invite
+router.post('/:userId/invites',
+  (req, res, next) => controller.createInvite(req, res, next)
+)
+
+// Delete invite
+router.delete('/:userId/invites/:inviteId',
+  (req, res, next) => controller.deleteInvite(req, res, next)
 )

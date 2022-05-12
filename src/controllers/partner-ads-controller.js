@@ -91,8 +91,6 @@ export class PartnerAdsController {
         }
       }).populate('owner')
 
-      console.log(ads)
-
       res
         .status(200)
         .json(ads)
