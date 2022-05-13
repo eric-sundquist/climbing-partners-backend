@@ -230,9 +230,10 @@ export class UsersController {
    */
   async createInvite (req, res, next) {
     try {
-      const { fromUserId, adId } = req.body
+      const { fromUserId, adId, searcherAdId } = req.body
       req.user.invites.push({
         fromUser: fromUserId,
+        fromAd: searcherAdId,
         ad: adId
       })
       await req.user.save()
@@ -259,7 +260,7 @@ export class UsersController {
   }
 
   /**
-   * Delete partner ad.
+   * Delete invite.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -272,6 +273,57 @@ export class UsersController {
       await req.user.save()
 
       res.status(204).end()
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Create session.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async createSession (req, res, next) {
+    try {
+      await req.user.populate({ path: 'invites.ad' })
+      // Invite that was accepted.
+      const [invite] = req.user.invites.filter(invite => req.body.inviteId === invite._id.valueOf())
+      console.log(invite)
+
+      // La till fromAd till invites documentet för att kunna ta bort fromUser ad.
+      // Skapa nya testanvändare
+      // Kolla så fromAd finns. Och Beta av lista nedan.
+
+      req.user.sessions.push({
+        withUser: invite.fromUser._id,
+        location: invite.ad.location,
+        date: invite.ad.date,
+        description: invite.ad.description
+      })
+
+      await req.user.save()
+
+      console.log(req.user)
+
+      // Create Session for user that sent the invite.
+      const partner = await User.findById(invite.fromUser)
+      partner.sessions.push({
+        withUser: req.user._id,
+        location: invite.ad.location,
+        date: invite.ad.date,
+        description: invite.ad.description
+      })
+      // await partner.save()
+
+      // Remove other user ad
+
+      // Remove invite
+
+      // Remove user ad
+
+      res.status(201).json(req.user)
     } catch (error) {
       next(error)
     }

@@ -19,7 +19,14 @@ const userSchema = new mongoose.Schema({
   partners: [mongoose.ObjectId],
   invites: [{
     fromUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    fromAd: { type: mongoose.Schema.Types.ObjectId, ref: 'PartnerAd' },
     ad: { type: mongoose.Schema.Types.ObjectId, ref: 'PartnerAd' }
+  }],
+  sessions: [{
+    withUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    location: String,
+    date: Date,
+    description: String
   }],
   ads: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PartnerAd' }]
 }, {

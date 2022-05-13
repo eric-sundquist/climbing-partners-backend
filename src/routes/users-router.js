@@ -88,3 +88,8 @@ router.post('/:userId/invites',
 router.delete('/:userId/invites/:inviteId',
   (req, res, next) => controller.deleteInvite(req, res, next)
 )
+
+// Create a new session
+router.post('/:userId/sessions',
+  (req, res, next) => controller.createSession(req, res, next)
+)
