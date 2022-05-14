@@ -81,7 +81,9 @@ export class UsersController {
     const p1 = req.user.populate('ads')
     const p2 = req.user.populate({ path: 'invites.ad' })
     const p3 = req.user.populate({ path: 'invites.fromUser' })
-    await Promise.all([p1, p2, p3])
+    const p4 = req.user.populate({ path: 'sessions.withUser' })
+
+    await Promise.all([p1, p2, p3, p4])
     res.json(req.user)
   }
 
@@ -166,7 +168,6 @@ export class UsersController {
         .status(201)
         .json(ad)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -290,12 +291,7 @@ export class UsersController {
       await req.user.populate({ path: 'invites.ad' })
       // Invite that was accepted.
       const [invite] = req.user.invites.filter(invite => req.body.inviteId === invite._id.valueOf())
-      console.log(invite)
-
-      // La till fromAd till invites documentet för att kunna ta bort fromUser ad.
-      // Skapa nya testanvändare
-      // Kolla så fromAd finns. Och Beta av lista nedan.
-
+      // Create session
       req.user.sessions.push({
         withUser: invite.fromUser._id,
         location: invite.ad.location,
@@ -303,11 +299,7 @@ export class UsersController {
         description: invite.ad.description
       })
 
-      await req.user.save()
-
-      console.log(req.user)
-
-      // Create Session for user that sent the invite.
+      // Create session for user that sent the invite.
       const partner = await User.findById(invite.fromUser)
       partner.sessions.push({
         withUser: req.user._id,
@@ -315,13 +307,17 @@ export class UsersController {
         date: invite.ad.date,
         description: invite.ad.description
       })
-      // await partner.save()
-
-      // Remove other user ad
-
-      // Remove invite
+      // Remove ad for user that sent the invite.
+      await PartnerAd.findByIdAndDelete(invite.fromAd)
 
       // Remove user ad
+      await PartnerAd.findByIdAndDelete(invite.ad._id)
+
+      // Remove invite
+      req.user.invites.id(req.body.inviteId).remove()
+
+      await req.user.save()
+      await partner.save()
 
       res.status(201).json(req.user)
     } catch (error) {

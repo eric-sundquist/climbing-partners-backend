@@ -90,7 +90,6 @@ export class PartnerAdsController {
           $lte: endOfDay(date)
         }
       }).populate('owner')
-
       res
         .status(200)
         .json(ads)
