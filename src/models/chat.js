@@ -1,5 +1,5 @@
 /**
- * Mongoose model for chats.
+ * Mongoose model for chat.
  *
  * @author Eric Sundqvist
  * @version 1.0.0
@@ -7,7 +7,7 @@
 
 import mongoose from 'mongoose'
 
-const chatsSchema = new mongoose.Schema({
+const chatSchema = new mongoose.Schema({
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, {
   timestamps: true,
@@ -26,8 +26,8 @@ const chatsSchema = new mongoose.Schema({
   }
 })
 
-chatsSchema.virtual('id').get(function () {
+chatSchema.virtual('id').get(function () {
   return this._id.toHexString()
 })
 
-export const Chats = mongoose.model('Chats', chatsSchema)
+export const Chat = mongoose.model('Chat', chatSchema)
