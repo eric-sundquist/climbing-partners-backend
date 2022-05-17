@@ -17,7 +17,7 @@ router.post('/',
   (req, res, next) => controller.createChat(req, res, next)
 )
 
-// GET all partner ads
-router.get('/',
+// GET all users chats
+router.get('/:userId',
   (req, res, next) => controller.getChat(req, res, next)
 )

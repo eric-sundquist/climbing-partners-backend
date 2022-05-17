@@ -1,39 +1,41 @@
 /**
- * Module for the Chats Controller.
+ * Module for the Messages Controller.
  *
  * @author Eric Sundqvist
  * @version 1.0.0
  */
 import createError from 'http-errors'
-import { Chat } from '../models/chat.js'
+import { Message } from '../models/message.js'
 
 /**
  * Encapsulates a controller.
  */
-export class ChatsController {
+export class MessagesController {
   /**
-   * Creates a new chat.
+   * Creates a new message.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async createChat (req, res, next) {
+  async createMessage (req, res, next) {
     try {
-      const chat = new Chat({
-        users: [req.body.fromUserId, req.body.toUserId]
+      const message = new Message({
+        chatId: req.body.chatId,
+        fromUser: req.body.fromUser,
+        text: req.body.text
       })
 
-      await chat.save()
+      await message.save()
 
-      res.status(201).json(chat)
+      res.status(201).json(message)
     } catch (error) {
       next(error)
     }
   }
 
   /**
-   * Gets the requested chat.
+   * Gets the all messages with the chatId.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -41,16 +43,16 @@ export class ChatsController {
    */
   async getChat (req, res, next) {
     try {
-      const chat = await Chat.find({
-        members: { $in: [req.params.userId] }
+      const messages = await Message.find({
+        chatId: req.params.chatId
       })
 
-      if (!chat) {
+      if (!messages) {
         next(createError(404, 'The requested resource was not found.'))
         return
       }
 
-      res.status(200).json(chat)
+      res.status(200).json(messages)
     } catch (error) {
       next(error)
     }

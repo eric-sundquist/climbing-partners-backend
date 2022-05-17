@@ -9,7 +9,8 @@ import express from 'express'
 import createError from 'http-errors'
 import { router as usersRouter } from './users-router.js'
 import { router as partnerAdsRouter } from './partner-ads-router.js'
-import { router as chatsRouter } from './chats-router'
+import { router as chatsRouter } from './chats-router.js'
+import { router as messagesRouter } from './message-router.js'
 
 import { firebase } from '../config/firebase.js'
 
@@ -58,6 +59,10 @@ router.use('/partner-ads',
 router.use('/chats',
   authenticateJWT,
   chatsRouter)
+
+router.use('/messages',
+  authenticateJWT,
+  messagesRouter)
 
 // Catch 404.
 router.use('*', (req, res, next) => next(createError(404)))
