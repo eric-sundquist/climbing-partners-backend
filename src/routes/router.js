@@ -11,7 +11,6 @@ import { router as usersRouter } from './users-router.js'
 import { router as partnerAdsRouter } from './partner-ads-router.js'
 import { router as chatsRouter } from './chats-router.js'
 import { router as messagesRouter } from './message-router.js'
-
 import { firebase } from '../config/firebase.js'
 
 export const router = express.Router()

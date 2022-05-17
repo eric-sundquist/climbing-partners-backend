@@ -19,5 +19,5 @@ router.post('/',
 
 // GET all users chats
 router.get('/:userId',
-  (req, res, next) => controller.getChat(req, res, next)
+  (req, res, next) => controller.getChats(req, res, next)
 )

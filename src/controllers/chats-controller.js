@@ -33,24 +33,24 @@ export class ChatsController {
   }
 
   /**
-   * Gets the requested chat.
+   * Gets the requested chats connected to a user.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async getChat (req, res, next) {
+  async getChats (req, res, next) {
     try {
-      const chat = await Chat.find({
+      const chats = await Chat.find({
         members: { $in: [req.params.userId] }
-      })
+      }).populate('users')
 
-      if (!chat) {
+      if (!chats) {
         next(createError(404, 'The requested resource was not found.'))
         return
       }
 
-      res.status(200).json(chat)
+      res.status(200).json(chats)
     } catch (error) {
       next(error)
     }
