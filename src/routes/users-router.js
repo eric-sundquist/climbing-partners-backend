@@ -9,12 +9,6 @@ import express from 'express'
 import { authOwner } from './auth-owner.js'
 import { UsersController } from '../controllers/users-controller.js'
 
-/*
-  Lägg till nya partner ad funktioner i controllern. Skapa partner ad med population.
-  https://mongoosejs.com/docs/populate.html
-  https://www.youtube.com/watch?v=kjKR0q8EBKE
-*/
-
 export const router = express.Router()
 
 const controller = new UsersController()
