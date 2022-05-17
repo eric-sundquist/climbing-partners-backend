@@ -1,5 +1,5 @@
 /**
- * Mongoose model for chats.
+ * Mongoose model for messages.
  *
  * @author Eric Sundqvist
  * @version 1.0.0
@@ -7,8 +7,16 @@
 
 import mongoose from 'mongoose'
 
-const chatsSchema = new mongoose.Schema({
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+const messageSchema = new mongoose.Schema({
+  chatId: {
+    type: String
+  },
+  fromUser: {
+    type: String
+  },
+  text: {
+    type: String
+  }
 }, {
   timestamps: true,
   toJSON: {
@@ -26,8 +34,8 @@ const chatsSchema = new mongoose.Schema({
   }
 })
 
-chatsSchema.virtual('id').get(function () {
+messageSchema.virtual('id').get(function () {
   return this._id.toHexString()
 })
 
-export const Chats = mongoose.model('Chats', chatsSchema)
+export const Message = mongoose.model('Message', messageSchema)
