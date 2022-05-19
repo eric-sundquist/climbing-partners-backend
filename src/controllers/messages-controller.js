@@ -4,7 +4,6 @@
  * @author Eric Sundqvist
  * @version 1.0.0
  */
-import createError from 'http-errors'
 import { Message } from '../models/message.js'
 
 /**
@@ -41,16 +40,11 @@ export class MessagesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async getChat (req, res, next) {
+  async getMessagesForChat (req, res, next) {
     try {
       const messages = await Message.find({
         chatId: req.params.chatId
       })
-
-      if (!messages) {
-        next(createError(404, 'The requested resource was not found.'))
-        return
-      }
 
       res.status(200).json(messages)
     } catch (error) {

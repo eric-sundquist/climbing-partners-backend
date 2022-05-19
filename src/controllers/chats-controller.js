@@ -4,7 +4,6 @@
  * @author Eric Sundqvist
  * @version 1.0.0
  */
-import createError from 'http-errors'
 import { Chat } from '../models/chat.js'
 
 /**
@@ -21,10 +20,13 @@ export class ChatsController {
   async createChat (req, res, next) {
     try {
       const chat = new Chat({
-        users: [req.body.fromUserId, req.body.toUserId]
+        users: [req.body.fromUserId, req.body.toUserId],
+        userIds: [req.body.fromUserId, req.body.toUserId]
       })
 
       await chat.save()
+
+      await chat.populate('users')
 
       res.status(201).json(chat)
     } catch (error) {
@@ -41,14 +43,9 @@ export class ChatsController {
    */
   async getChats (req, res, next) {
     try {
-      const chats = await Chat.find({
-        members: { $in: [req.params.userId] }
-      }).populate('users')
-
-      if (!chats) {
-        next(createError(404, 'The requested resource was not found.'))
-        return
-      }
+      console.log(req.params.userId)
+      const chats = await Chat.find({ userIds: req.params.userId }).populate('users')
+      console.log(chats)
 
       res.status(200).json(chats)
     } catch (error) {
