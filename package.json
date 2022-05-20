@@ -25,7 +25,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.7",
     "morgan": "^1.10.0",
-    "node-fetch": "^3.2.2"
+    "node-fetch": "^3.2.2",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
     "@lnu/eslint-config": "^1.1.4",

@@ -43,9 +43,7 @@ export class ChatsController {
    */
   async getChats (req, res, next) {
     try {
-      console.log(req.params.userId)
       const chats = await Chat.find({ userIds: req.params.userId }).populate('users')
-      console.log(chats)
 
       res.status(200).json(chats)
     } catch (error) {

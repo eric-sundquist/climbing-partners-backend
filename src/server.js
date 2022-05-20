@@ -8,6 +8,9 @@
 import express from 'express'
 import helmet from 'helmet'
 import logger from 'morgan'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
+import { SessionStore } from './SessionStore.js'
 import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
 import cors from 'cors'
@@ -17,18 +20,51 @@ try {
 
   const app = express()
 
-  // Set various HTTP headers to make the application little more secure (https://www.npmjs.com/package/helmet).
   app.use(helmet())
 
-  app.use(cors({ origin: 'http://localhost:3000' }))
+  app.use(cors({ origin: process.env.CLIENT_URL }))
 
-  // Set up a morgan logger using the dev format for log entries.
   app.use(logger('dev'))
 
   app.use(express.json())
 
   // Register routes.
   app.use('/', router)
+
+  // Setup websocket server
+  const httpServer = createServer(app)
+  const io = new Server(httpServer, {
+    cors: {
+      origin: [process.env.CLIENT_URL]
+    }
+  })
+  const sessions = new SessionStore()
+
+  io.on('connection', (socket) => {
+    console.log('user connected')
+
+    socket.on('add-user', (uid) => {
+      console.log(uid)
+      sessions.saveSession(uid, socket.id)
+    })
+
+    socket.on('send-message', ({ senderUid, receiverUid, text }) => {
+      const user = sessions.findSession(receiverUid)
+      console.log(user)
+      if (user) {
+        io.to(user.socketId).emit('get-message', {
+          senderUid,
+          text
+        })
+      }
+    })
+
+    // when disconnect
+    socket.on('disconnect', () => {
+      sessions.removeSession(socket.id)
+    })
+  })
+  io.listen(process.env.SOCKET_PORT)
 
   // Error handler.
   app.use(function (err, req, res, next) {
