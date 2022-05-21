@@ -41,8 +41,6 @@ try {
   const sessions = new SessionStore()
 
   io.on('connection', (socket) => {
-    console.log('user connected')
-
     socket.on('add-user', (uid) => {
       console.log(uid)
       sessions.saveSession(uid, socket.id)
@@ -50,7 +48,6 @@ try {
 
     socket.on('send-message', ({ senderUid, receiverUid, text }) => {
       const user = sessions.findSession(receiverUid)
-      console.log(user)
       if (user) {
         io.to(user.socketId).emit('get-message', {
           senderUid,
@@ -103,6 +100,7 @@ try {
   // Starts the HTTP server listening for connections.
   app.listen(process.env.PORT, () => {
     console.log(`Server running at http://localhost:${process.env.PORT}`)
+    console.log(`Websocket-Server running at http://localhost:${process.env.SOCKET_PORT}`)
     console.log('Press Ctrl-C to terminate...')
   })
 } catch (err) {
