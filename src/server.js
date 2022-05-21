@@ -31,7 +31,7 @@ try {
   // Register routes.
   app.use('/', router)
 
-  // Setup websocket server
+  // Setup websocket
   const httpServer = createServer(app)
   const io = new Server(httpServer, {
     cors: {
@@ -98,9 +98,8 @@ try {
   })
 
   // Starts the HTTP server listening for connections.
-  app.listen(process.env.PORT, () => {
+  httpServer.listen(process.env.PORT, () => {
     console.log(`Server running at http://localhost:${process.env.PORT}`)
-    console.log(`Websocket-Server running at http://localhost:${process.env.SOCKET_PORT}`)
     console.log('Press Ctrl-C to terminate...')
   })
 } catch (err) {
