@@ -61,8 +61,6 @@ try {
       sessions.removeSession(socket.id)
     })
   })
-  io.listen(process.env.SOCKET_PORT)
-
   // Error handler.
   app.use(function (err, req, res, next) {
     err.status = err.status || 500
