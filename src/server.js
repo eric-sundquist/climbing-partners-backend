@@ -14,6 +14,7 @@ import { SessionStore } from './SessionStore.js'
 import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
 import cors from 'cors'
+import { firebase } from './config/firebase.js'
 
 try {
   await connectDB()
@@ -40,8 +41,26 @@ try {
   })
   const sessions = new SessionStore()
 
+  io.use((socket, next) => {
+    /**
+     * Authorizes user to use websocket connection.
+     */
+    const authUser = async () => {
+      const token = socket.handshake.auth.token
+      try {
+        await firebase.auth().verifyIdToken(token)
+      } catch (err) {
+        next(new Error('unauthorized'))
+      }
+      next()
+    }
+
+    authUser()
+  })
+
   io.on('connection', (socket) => {
     socket.on('add-user', (uid) => {
+      console.log('added user')
       console.log(uid)
       sessions.saveSession(uid, socket.id)
     })
