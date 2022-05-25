@@ -68,11 +68,6 @@ router.delete('/:userId/partner-ad/:adId',
 
 // ----- user -> invites ------
 
-// Get invites
-router.get('/:userId/invites',
-  (req, res, next) => controller.getInvites(req, res, next)
-)
-
 // Create invite
 router.post('/:userId/invites',
   (req, res, next) => controller.createInvite(req, res, next)

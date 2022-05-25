@@ -24,7 +24,6 @@ export class UsersController {
     try {
       // Get the user.
       const user = await User.findOne({ uid: userId })
-
       // If no image found send a 404 (Not Found).
       if (!user) {
         next(createError(404, 'The requested resource was not found.'))
@@ -216,7 +215,7 @@ export class UsersController {
 
       await req.user.save()
 
-      res.status(204).end()
+      res.status(200).json(req.user)
     } catch (error) {
       next(error)
     }
@@ -231,30 +230,15 @@ export class UsersController {
    */
   async createInvite (req, res, next) {
     try {
-      const { fromUserId, adId, searcherAdId } = req.body
+      const { fromUserId, adId, currentUserAdId } = req.body
       req.user.invites.push({
         fromUser: fromUserId,
-        fromAd: searcherAdId,
+        fromAd: currentUserAdId,
         ad: adId
       })
       await req.user.save()
 
-      res.status(204).end()
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  /**
-   * Get user invites.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  async getInvites (req, res, next) {
-    try {
-      res.status(204).end()
+      res.status(200).json(req.user)
     } catch (error) {
       next(error)
     }
@@ -273,7 +257,7 @@ export class UsersController {
 
       await req.user.save()
 
-      res.status(204).end()
+      res.status(200).json(req.user)
     } catch (error) {
       next(error)
     }
