@@ -33,8 +33,12 @@ export class SessionStore {
    * @param {string} socketId - Socket Id to add.
    */
   saveSession (uid, socketId) {
-    !this.users.some((user) => user.uid === uid) &&
-      this.users.push({ uid, socketId })
+    // If user already in session remove old session and replace with new.
+    const userAlreadyInSession = this.users.find((user) => user.uid === uid)
+    if (userAlreadyInSession) {
+      this.users.splice(this.users.indexOf(userAlreadyInSession), 1)
+    }
+    this.users.push({ uid, socketId })
   }
 
   /**

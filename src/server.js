@@ -60,8 +60,6 @@ try {
 
   io.on('connection', (socket) => {
     socket.on('add-user', (uid) => {
-      console.log('added user')
-      console.log(uid)
       sessions.saveSession(uid, socket.id)
     })
 
